@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Google Sign-In</title>
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin: 20px;
+      }
+
+      h1 {
+        color: #333;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        margin: 10px;
+        cursor: pointer;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Delete account of Eat Me</h1>
+    <button id="login">Login with Google</button>
+    <button id="logout" style="display: none">Logout</button>
+    <button id="deleteAccount" style="display: none">DELETE ACCOUNT</button>
+
+    <script>
+      // Your web app's Firebase configuration
+      var firebaseConfig = {
+        apiKey: "AIzaSyBXt7SKMnr-gDeJqSiXrVXVEyWjZuh8O8g",
+        authDomain: "afood-a0d5f.firebaseapp.com",
+        projectId: "afood-a0d5f",
+        // storageBucket: "YOUR_STORAGE_BUCKET",
+        // messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        appId: "1:164966780531:android:709b51778fbbe07ddfa406",
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+
+      const auth = firebase.auth();
+
+      const loginButton = document.getElementById("login");
+      const logoutButton = document.getElementById("logout");
+      const deleteAccountButton = document.getElementById("deleteAccount");
+
+      loginButton.addEventListener("click", () => {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        auth
+          .signInWithPopup(provider)
+          .then((result) => {
+            console.log(result);
+            loginButton.style.display = "none";
+            logoutButton.style.display = "inline";
+            deleteAccountButton.style.display = "inline";
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      });
+
+      logoutButton.addEventListener("click", () => {
+        auth
+          .signOut()
+          .then(() => {
+            loginButton.style.display = "inline";
+            logoutButton.style.display = "none";
+            deleteAccountButton.style.display = "none";
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      });
+
+      deleteAccountButton.addEventListener("click", () => {
+        const user = auth.currentUser;
+        if (user) {
+          user
+            .delete()
+            .then(() => {
+              alert("Account deleted successfully.");
+              loginButton.style.display = "inline";
+              logoutButton.style.display = "none";
+              deleteAccountButton.style.display = "none";
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
+      });
+    </script>
+  </body>
+</html>
